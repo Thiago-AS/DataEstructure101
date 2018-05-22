@@ -4,7 +4,11 @@
 #define TRUE 1
 #define FALSE 0
 
+#include "stack.h"
+
 int ValidateInfix(char* expression);
+
+char* InfixToPosFix(char * expression);
 
 
 
