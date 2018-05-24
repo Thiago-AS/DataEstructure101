@@ -10,8 +10,9 @@ int ValidateInfix(char* expression);
 
 char* InfixToPosFix(char * expression);
 
+float PostFixValue(char * expression);
+
+float GetFloat(header* sHead);
 
 
-
-
-#endif //CALCULADORA_EXPRESSION_H
+#endif

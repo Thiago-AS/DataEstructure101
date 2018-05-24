@@ -6,7 +6,7 @@
 #include <string.h>
 
 typedef struct stack{
-    unsigned int value;
+    char value;
     struct stack *next;
 }stack;
 
@@ -15,12 +15,26 @@ typedef struct header{
     int amount;
 }header;
 
+typedef struct float_stack{
+    float value;
+    struct float_stack *next;
+}float_stack;
+
+typedef struct float_header{
+    struct float_stack* float_stack;
+    int amount;
+}float_header;
+
 header* CreateStack();
 
-void PushChar(header* pHead, char value);
+float_header* CreateFloatStack();
 
-char PopChar(header *pHead);
+void PushChar(header* sHead, char value);
 
+char PopChar(header *sHead);
 
+void PushFloat(float_header* sHead, float value);
 
-#endif //CALCULADORA_STACK_H
+float PopFloat(float_header* sHead);
+
+#endif
