@@ -1,12 +1,12 @@
 #include "user.h"
 
-char* readExpression() {
+char* ReadExpression() {
     char *expression = (char *) malloc(sizeof(char) * 50);
     scanf("%s", expression);
     return expression;
 }
 
-void menu(){
+void Menu(){
     int option;
     char* expression;
     char* postfix;
@@ -20,23 +20,30 @@ void menu(){
         case 1:
             system("clear");
             printf("Digite sua expressão: ");
-            expression = readExpression();
+            expression = ReadExpression();
             if(ValidateInfix(expression)){
                 printf("Expressão válida\n");
                 postfix = InfixToPosFix(expression);
                 printf("Forma posfixa: %s\n", postfix);
                 printf("Resultado: %f \n", PostFixValue(postfix));
+                printf("-----------------------------------------------\n");
+                free(expression);
+                free(postfix);
             }
-            else
-                printf("Expressao invalida");
+            else{
+                printf("Expressão inválida\n");
+                printf("-----------------------------------------------\n");
+            }
+            break;
 
-            break;
         case 2:
+            Calculator();
             break;
+
         case 3:
             break;
         default:
-            printf("Escolha uma das opções acima");
+            printf("Escolha uma das opções acima\n");
             break;
     }
     }while(option != 3);

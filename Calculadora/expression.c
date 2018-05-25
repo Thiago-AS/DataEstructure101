@@ -1,5 +1,6 @@
 #include <math.h>
 #include "expression.h"
+#include "user.h"
 
 int ValidateInfix(char* expression){
     header *sHead   = CreateStack();
@@ -129,6 +130,7 @@ char* InfixToPosFix(char * expression){
 
     }
     final_expression[y] = '\0';
+    free(sHead);
     return final_expression;
 }
 
@@ -172,8 +174,10 @@ float PostFixValue(char * expression){
             }
         }
     }
-
-    return PopFloat(fHead);
+    number = PopFloat(fHead);
+    free(sHead);
+    free(fHead);
+    return number;
 
 }
 
@@ -196,4 +200,51 @@ float GetFloat(header* sHead){
 
     float_value = float_value / powf(10,dot);
     return float_value;
+}
+
+void Calculator(){
+    char* expression;
+    header* sHead = CreateStack();
+    float_header* fHead = CreateFloatStack();
+    float num1,num2;
+    do{
+        system("clear");
+        printf("Modo Calculadora (Digite 'sair' para voltar ao menu)\n");
+        if(fHead->float_stack == NULL){
+            printf("Pilha vazia!\n");
+        }else{
+            InvertAndPrint(fHead);
+        }
+        expression = ReadExpression();
+        switch(expression[0]){
+            case '-':
+                num2 = PopFloat(fHead);
+                num1 = PopFloat(fHead);
+                PushFloat(fHead, (num1-num2));
+                break;
+            case '+':
+                num2 = PopFloat(fHead);
+                num1 = PopFloat(fHead);
+                PushFloat(fHead, (num1+num2));
+                break;
+            case '*':
+                num2 = PopFloat(fHead);
+                num1 = PopFloat(fHead);
+                PushFloat(fHead, (num1*num2));
+                break;
+            case '/':
+                num2 = PopFloat(fHead);
+                num1 = PopFloat(fHead);
+                PushFloat(fHead, (num1/num2));
+                break;
+            default:
+                for(int i=0;i<strlen(expression);i++){
+                    PushChar(sHead, expression[i]);
+                }
+                PushFloat(fHead,GetFloat(sHead));
+                break;
+        }
+    }while(strcmp(expression,"sair"));
+    system("clear");
+
 }

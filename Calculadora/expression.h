@@ -14,5 +14,6 @@ float PostFixValue(char * expression);
 
 float GetFloat(header* sHead);
 
+void Calculator();
 
 #endif

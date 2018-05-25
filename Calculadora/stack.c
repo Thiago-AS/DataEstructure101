@@ -17,11 +17,13 @@ void PushChar(header* sHead, char value){
 
 char PopChar(header *sHead){
     char character;
+    stack * free_element;
     if(sHead->amount != 0){
         sHead->amount--;
         character    = sHead ->stack->value;
-        free(sHead->stack);
+        free_element = sHead ->stack;
         sHead->stack = sHead->stack->next;
+        free(free_element);
         return character;
     }
     else{
@@ -46,11 +48,27 @@ void PushFloat(float_header* sHead, float value){
 
 float PopFloat(float_header* sHead){
     float value;
+    float_stack *free_element;
     if(sHead->amount != 0){
         sHead->amount--;
         value    = sHead ->float_stack->value;
-        free(sHead->float_stack);
+        free_element = sHead ->float_stack;
         sHead->float_stack = sHead->float_stack->next;
+        free(free_element);
         return value;
+    }
+}
+
+void InvertAndPrint(float_header* sHead){
+    float_stack* pointer;
+    float numbers[sHead->amount];
+    int i = 0;
+    pointer = sHead->float_stack;
+    while(pointer != NULL){
+        numbers[i++] = pointer->value;
+        pointer = pointer->next;
+    }
+    for(int x = (sHead->amount-1);x>=0;x--){
+        printf("%d. %f\n", (x+1), numbers[x]);
     }
 }

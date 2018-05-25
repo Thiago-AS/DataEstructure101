@@ -4,8 +4,8 @@
 #include "expression.h"
 #include "stack.h"
 
-char* readExpression();
+char* ReadExpression();
 
-void menu();
+void Menu();
 
 #endif
