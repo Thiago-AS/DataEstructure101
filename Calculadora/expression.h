@@ -16,4 +16,6 @@ float GetFloat(header* sHead);
 
 void Calculator();
 
+void ExpressionResolver();
+
 #endif

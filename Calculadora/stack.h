@@ -39,4 +39,6 @@ float PopFloat(float_header* sHead);
 
 void InvertAndPrint(float_header* sHead);
 
+void ClearFloatStack(float_header* sHead);
+
 #endif

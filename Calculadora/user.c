@@ -8,8 +8,6 @@ char* ReadExpression() {
 
 void Menu(){
     int option;
-    char* expression;
-    char* postfix;
     do{
     printf("1 - Modo Expressão\n");
     printf("2 - Modo Calculadora\n");
@@ -18,22 +16,7 @@ void Menu(){
     scanf("%d", &option);
     switch(option){
         case 1:
-            system("clear");
-            printf("Digite sua expressão: ");
-            expression = ReadExpression();
-            if(ValidateInfix(expression)){
-                printf("Expressão válida\n");
-                postfix = InfixToPosFix(expression);
-                printf("Forma posfixa: %s\n", postfix);
-                printf("Resultado: %f \n", PostFixValue(postfix));
-                printf("-----------------------------------------------\n");
-                free(expression);
-                free(postfix);
-            }
-            else{
-                printf("Expressão inválida\n");
-                printf("-----------------------------------------------\n");
-            }
+            ExpressionResolver();
             break;
 
         case 2:

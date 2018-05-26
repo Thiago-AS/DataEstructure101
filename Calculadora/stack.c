@@ -72,3 +72,13 @@ void InvertAndPrint(float_header* sHead){
         printf("%d. %f\n", (x+1), numbers[x]);
     }
 }
+
+void ClearFloatStack(float_header* sHead){
+    while(sHead->float_stack != NULL){
+        float_stack* pointer;
+        pointer = sHead->float_stack;
+        sHead->float_stack = sHead->float_stack->next;
+        free(pointer);
+    }
+    free(sHead);
+}

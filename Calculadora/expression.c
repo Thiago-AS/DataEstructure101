@@ -127,7 +127,6 @@ char* InfixToPosFix(char * expression){
         auxChar = PopChar(sHead);
         final_expression[y++] = ' ';
         final_expression[y++] = auxChar;
-
     }
     final_expression[y] = '\0';
     free(sHead);
@@ -203,7 +202,7 @@ float GetFloat(header* sHead){
 }
 
 void Calculator(){
-    char* expression;
+    char* expression = NULL;
     header* sHead = CreateStack();
     float_header* fHead = CreateFloatStack();
     float num1,num2;
@@ -215,27 +214,91 @@ void Calculator(){
         }else{
             InvertAndPrint(fHead);
         }
-        expression = ReadExpression();
+        if(expression == NULL){
+            expression = ReadExpression();
+        }else{
+            free(expression);
+            expression = ReadExpression();
+        }
         switch(expression[0]){
             case '-':
-                num2 = PopFloat(fHead);
-                num1 = PopFloat(fHead);
-                PushFloat(fHead, (num1-num2));
+                if(fHead->amount == 1){
+                    printf("Número de operadores insuficiente!\n");
+                }else{
+                    if(expression[1] == '!'){
+                        while(fHead->amount!=1){
+                            num2 = PopFloat(fHead);
+                            num1 = PopFloat(fHead);
+                            PushFloat(fHead, (num1-num2));
+                        }
+                    }else{
+                        num2 = PopFloat(fHead);
+                        num1 = PopFloat(fHead);
+                        PushFloat(fHead, (num1-num2));
+                    }
+                }
                 break;
             case '+':
-                num2 = PopFloat(fHead);
-                num1 = PopFloat(fHead);
-                PushFloat(fHead, (num1+num2));
+                if(fHead->amount == 1){
+                    printf("Número de operadores insuficiente!\n");
+                }else{
+                    if(expression[1] == '!'){
+                        while(fHead->amount!=1){
+                            num2 = PopFloat(fHead);
+                            num1 = PopFloat(fHead);
+                            PushFloat(fHead, (num1+num2));
+                        }
+                    }else{
+                        num2 = PopFloat(fHead);
+                        num1 = PopFloat(fHead);
+                        PushFloat(fHead, (num1+num2));
+                    }
+                }
                 break;
             case '*':
-                num2 = PopFloat(fHead);
-                num1 = PopFloat(fHead);
-                PushFloat(fHead, (num1*num2));
+                if(fHead->amount == 1){
+                    printf("Número de operadores insuficiente!\n");
+                }else{
+                    if(expression[1] == '!'){
+                        while(fHead->amount!=1){
+                            num2 = PopFloat(fHead);
+                            num1 = PopFloat(fHead);
+                            PushFloat(fHead, (num1*num2));
+                        }
+                    }else{
+                        num2 = PopFloat(fHead);
+                        num1 = PopFloat(fHead);
+                        PushFloat(fHead, (num1*num2));
+                    }
+                }
                 break;
             case '/':
-                num2 = PopFloat(fHead);
-                num1 = PopFloat(fHead);
-                PushFloat(fHead, (num1/num2));
+                if(fHead->amount == 1){
+                    printf("Número de operadores insuficiente!\n");
+                }else{
+                    if(expression[1] == '!'){
+                        while(fHead->amount!=1){
+                            num2 = PopFloat(fHead);
+                            num1 = PopFloat(fHead);
+                            PushFloat(fHead, (num1/num2));
+                        }
+                    }else{
+                        num2 = PopFloat(fHead);
+                        num1 = PopFloat(fHead);
+                        PushFloat(fHead, (num1/num2));
+                    }
+                }
+                break;
+            case 'c':
+                if(fHead->amount == 1){
+                    printf("Número de operadores insuficiente!\n");
+                }else{
+                    num2 = PopFloat(fHead);
+                    num1 = PopFloat(fHead);
+                    for(int i=0; i<num2;i++){
+                        PushFloat(fHead, num1);
+                    }
+                }
                 break;
             default:
                 for(int i=0;i<strlen(expression);i++){
@@ -244,7 +307,31 @@ void Calculator(){
                 PushFloat(fHead,GetFloat(sHead));
                 break;
         }
-    }while(strcmp(expression,"sair"));
+    }while(strcmp(expression,"sair")!=0);
+    ClearFloatStack(fHead);
+    free(sHead);
+    free(expression);
     system("clear");
+}
 
+void ExpressionResolver(){
+    char* expression;
+    char* postfix;
+    system("clear");
+    printf("Digite sua expressão: ");
+    expression = ReadExpression();
+    if(ValidateInfix(expression)){
+        printf("Expressão válida\n");
+        postfix = InfixToPosFix(expression);
+        printf("Forma posfixa: %s\n", postfix);
+        printf("Resultado: %f \n", PostFixValue(postfix));
+        printf("-----------------------------------------------\n");
+        free(expression);
+        free(postfix);
+    }
+    else{
+        free(expression);
+        printf("Expressão inválida\n");
+        printf("-----------------------------------------------\n");
+    }
 }
