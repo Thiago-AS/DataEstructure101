@@ -266,10 +266,17 @@ void Calculator(){
     char* expression = NULL;
     header* sHead = CreateStack();
     float_header* fHead = CreateFloatStack();
+    int no_operands=0;
     float num1,num2;
     do{
-        system("clear");
-        printf("Modo Calculadora (Digite 'sair' para voltar ao menu)\n");
+        if(no_operands){
+            system("clear");
+            printf("Modo Calculadora (Digite 'sair' para voltar ao menu)\n");
+            printf("Número de operadores insuficiente!\n");
+        }else{
+            system("clear");
+            printf("Modo Calculadora (Digite 'sair' para voltar ao menu)\n");
+        }
         if(fHead->float_stack == NULL){
             printf("Pilha vazia!\n");
         }else{
@@ -284,7 +291,7 @@ void Calculator(){
         switch(expression[0]){
             case '-':
                 if(fHead->amount == 1){
-                    printf("Número de operadores insuficiente!\n");
+                    no_operands=1;
                 }else{
                     if(expression[1] == '!'){
                         while(fHead->amount!=1){
@@ -297,11 +304,12 @@ void Calculator(){
                         num1 = PopFloat(fHead);
                         PushFloat(fHead, (num1-num2));
                     }
+                    no_operands=0;
                 }
                 break;
             case '+':
                 if(fHead->amount == 1){
-                    printf("Número de operadores insuficiente!\n");
+                    no_operands=1;
                 }else{
                     if(expression[1] == '!'){
                         while(fHead->amount!=1){
@@ -314,11 +322,12 @@ void Calculator(){
                         num1 = PopFloat(fHead);
                         PushFloat(fHead, (num1+num2));
                     }
+                    no_operands=0;
                 }
                 break;
             case '*':
                 if(fHead->amount == 1){
-                    printf("Número de operadores insuficiente!\n");
+                    no_operands=1;
                 }else{
                     if(expression[1] == '!'){
                         while(fHead->amount!=1){
@@ -331,11 +340,12 @@ void Calculator(){
                         num1 = PopFloat(fHead);
                         PushFloat(fHead, (num1*num2));
                     }
+                    no_operands=0;
                 }
                 break;
             case '/':
                 if(fHead->amount == 1){
-                    printf("Número de operadores insuficiente!\n");
+                    no_operands=1;
                 }else{
                     if(expression[1] == '!'){
                         while(fHead->amount!=1){
@@ -348,17 +358,19 @@ void Calculator(){
                         num1 = PopFloat(fHead);
                         PushFloat(fHead, (num1/num2));
                     }
+                    no_operands=0;
                 }
                 break;
             case 'c':
                 if(fHead->amount == 1){
-                    printf("Número de operadores insuficiente!\n");
+                    no_operands=1;
                 }else{
                     num2 = PopFloat(fHead);
                     num1 = PopFloat(fHead);
                     for(int i=0; i<num2;i++){
                         PushFloat(fHead, num1);
                     }
+                    no_operands=0;
                 }
                 break;
             default:
