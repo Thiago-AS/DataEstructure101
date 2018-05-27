@@ -2,6 +2,15 @@
 #include "expression.h"
 #include "user.h"
 
+/**
+ *  Inicia-se uma pilha vazia e itera-se sobre a expressão informada, onde se um
+ *  parenteses de abertura for encontrado, o mesmo é empilhado. Se um parenteses de
+ *  fechamento é encontrado, verifica-se se a pilha se encontra vaiza, caso esteja
+ *  vazia, então a equação não é valida, caso tenha elementos, um elemento é desempilhado.
+ *
+ *  Ao final da verificação a pilha deve se encontrar vazia, caso não se encontre
+ *  vazia, a expressão é invalidada.
+ */
 int ValidateInfix(char* expression){
     header *sHead   = CreateStack();
     for(int i=0; i<strlen(expression); i++){
@@ -34,6 +43,21 @@ int ValidateInfix(char* expression){
     }
 }
 
+/**
+ *  Inicia-se uma pilha vazia e itera-se sobre a expressão informada, copia-se todos
+ *  os operandos encontrados diretamente para a expressão de saida.
+ *
+ *  Ao encontrar uma operação, caso a pilha não esteja vazia e houver um operador
+ *  de maior prioriade no topo, desempilha-se o operar e o copia na saída, se não
+ *  apenas empilha o operador.
+ *
+ *  Ao encontrar um parenteses de abertura, este é empilhado. Ao encontrar um parenteses
+ *  de fechamento, remove-se os elementos da pilha e os copia na saída, até que o
+ *  parenteses de abertura seja desempilhado.
+ *
+ *  Para que fosse possível a converção para float posteriormente, adicionou-se um caractére
+ *  especial após cada operando ou operação, sendo este um espaço vazio ' '.
+ */
 char* InfixToPosFix(char * expression){
     header *sHead   = CreateStack();
     int y=0;
@@ -133,6 +157,20 @@ char* InfixToPosFix(char * expression){
     return final_expression;
 }
 
+/**
+ *  Inicia-se duas pilhas vazias, uma de char e outra de float. Itera-se sobre
+ *  a expressão fornecida, onde copia-se os operandos para a pila de char.
+ *
+ *  Ao encontrar um espaço vazio, e seu valor anterior ser um digito, utiliza-se da
+ *  função GetFloat, onde transforma-se o valor antes em string para um float, e empilha-o
+ *  na pilha de floats.
+ *
+ *  Ao encontrar uma operação, então seus operandos se encontram na pilha de floats.
+ *  Os dois valores correspondentes a operação específica são desempilhados e a operação
+ *  é realizada, o resultado é novamente empilhado.
+ *
+ *  Ao final, a pilha conterá apenas o valor final da expressão que é retornado.
+ */
 float PostFixValue(char * expression){
     header *sHead   = CreateStack();
     float_header* fHead = CreateFloatStack();
@@ -180,6 +218,17 @@ float PostFixValue(char * expression){
 
 }
 
+/**
+ *  Recebe uma pilha contendo uma string de um valor decomposto em digitos char.
+ *
+ *  Desempilha-se os valores até encontrar o ponto, realizando uma operação para deixar
+ *  os digitos em suas respectivas casas decimais (Valor_float = powf(10, contador)
+ *  *(Valor_char - 48) + Valor_float)
+ *
+ *  Ao encontrar o ponto, salva-se sua posição na devida casa decimal, para que
+ *  seja possivel dividir o valor final por dez elevado a posição decimal do ponto,
+ *  obtendo assim o valor em float.
+ */
 float GetFloat(header* sHead){
     int dot,counter;
     float float_value;
@@ -201,6 +250,18 @@ float GetFloat(header* sHead){
     return float_value;
 }
 
+/**
+ *  Inicia uma pilha de float vazia e aguarda pela entrada de dados. Assim que um número é digitado
+ *  , este é empilhado.
+ *
+ *  Assim que uma operação é digitada, os operandos necessários são desempilhados, é realizada
+ *  a operação e o resultado é empilhado novamente.
+ *
+ *  Quando a quantidade de operando for insuficiente, uma mensagem de erro é exibida.
+ *
+ *  Enquanto a calculadora esta em execução, esta imprime constantemente a pilha em
+ *  forma inversa.
+ */
 void Calculator(){
     char* expression = NULL;
     header* sHead = CreateStack();
@@ -314,6 +375,13 @@ void Calculator(){
     system("clear");
 }
 
+/**
+ *  Invoca todas as funções necessárias para o funcionamento da resolução de expressão.
+ *
+ *  Primeiramente a expressão do usuário é informada, valida-se a expressão, caso inválida
+ *  volta para o menu, caso válida transforma a expressão para sua forma posfixa e imprime
+ *  tal expressão, obtem-se a resolução da expressão e imprime o valor final do resultado.
+ */
 void ExpressionResolver(){
     char* expression;
     char* postfix;
