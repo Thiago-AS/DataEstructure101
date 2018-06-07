@@ -30,7 +30,9 @@ typedef struct list{
 
 List* ListAlloc();
 
-Element* ElementAlloc(char* name, int attack, int defense, int resistance, int speed);
+Element* ElementAlloc(Team* team);
+
+Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _speed);
 
 List* ReadFile(char* file_name);
 

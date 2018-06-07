@@ -9,16 +9,21 @@ List* ListAlloc(){
     return list;
 }
 
-Element* ElementAlloc(char* name, int attack, int defense, int resistance, int speed){
-    Element* element = (Element*) malloc(sizeof(Element));
-
+Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _speed){
     Team* team = (Team*) malloc(sizeof(Team));
-    team->name = (char*) malloc(sizeof(char)*strlen(name));
-    strcpy(team->name,name);
-    team->attack = attack;
-    team->defense = defense;
-    team->resistance = resistance;
-    team->speed = speed;
+    team->name = (char*) malloc(sizeof(char)*strlen(_name));
+    strcpy(team->name,_name);
+    team->attack = _attack;
+    team->defense = _defense;
+    team->resistance = _resistance;
+    team->speed = _speed;
+
+    return team;
+}
+
+
+Element* ElementAlloc(Team* team){
+    Element* element = (Element*) malloc(sizeof(Element));
 
     element->team = team;
     element->next = NULL;
