@@ -1,7 +1,7 @@
 #include "user.h"
 
 /**
- *  Aloca-se um espaço de memoria para 50 caractéres, registra-se a expressão
+ *  Aloca-se um espaço de memoria para 50 caracteres, registra-se a expressão
  *  digitada pelo usuário, e retorna-se a mesma.
  */
 char* ReadExpression() {

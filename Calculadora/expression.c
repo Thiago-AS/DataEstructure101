@@ -55,7 +55,7 @@ int ValidateInfix(char* expression){
  *  de fechamento, remove-se os elementos da pilha e os copia na saída, até que o
  *  parenteses de abertura seja desempilhado.
  *
- *  Para que fosse possível a converção para float posteriormente, adicionou-se um caractére
+ *  Para que fosse possível a conversão para float posteriormente, adicionou-se um caractere
  *  especial após cada operando ou operação, sendo este um espaço vazio ' '.
  */
 char* InfixToPosFix(char * expression){
