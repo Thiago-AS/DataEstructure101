@@ -18,8 +18,8 @@ typedef struct team{
 typedef struct l_element{
     Team* team;
 
-    struct element* previous;
-    struct element* next;
+    struct l_element* previous;
+    struct l_element* next;
 }L_element;
 
 typedef struct list{
@@ -37,5 +37,7 @@ Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _
 List* ReadFile(char* file_name);
 
 void InsertElement(L_element* element, List* list);
+
+void team_free(Team* team);
 
 #endif

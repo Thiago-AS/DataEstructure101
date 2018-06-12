@@ -67,3 +67,9 @@ List* ReadFile(char* file_name){
     return list;
 }
 
+void team_free(Team* team){
+    free(team->name);
+    free(team);
+}
+
+

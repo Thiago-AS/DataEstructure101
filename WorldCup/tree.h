@@ -11,9 +11,12 @@ typedef struct node{
 
 t_node* node_create();
 
-t_node* tree_create();
+//@TODO: Ask about recursivly function without parameters
+t_node* tree_create(int depth);
 
 void tree_free(t_node* tree);
 
 void tree_print_preorder(t_node* root);
+
+
 #endif
