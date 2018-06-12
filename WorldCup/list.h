@@ -15,25 +15,27 @@ typedef struct team{
     int speed;
 }Team;
 
-typedef struct element{
+typedef struct l_element{
     Team* team;
 
     struct element* previous;
     struct element* next;
-}Element;
+}L_element;
 
 typedef struct list{
-    Element* first;
-    Element* last;
+    L_element* first;
+    L_element* last;
     int amount;
 }List;
 
 List* ListAlloc();
 
-Element* ElementAlloc(Team* team);
+L_element* ElementAlloc(Team* team);
 
 Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _speed);
 
 List* ReadFile(char* file_name);
+
+void InsertElement(L_element* element, List* list);
 
 #endif
