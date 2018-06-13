@@ -12,11 +12,18 @@ int main() {
 //    for(i=0; i < test->amount; i++, ptr = ptr->next){
 //        printf("%s %d %d %d %d\n",ptr->team->name, ptr->team->attack, ptr->team->defense, ptr->team->resistance, ptr->team->speed);
 //    }
-    int depth;
-    depth = 4;
     t_node* root = tree_create(4);
 
     tree_print_preorder(root);
+
+    t_heap* heap = create_heap();
+
+    heapfy_tree(root, heap);
+    int i;
+    for(i=0; i<heap->size; i++){
+        printf("Heap atack: %d\n", heap->array[i]->team->attack);
+    }
+
 
     tree_free(root);
     return 0;
