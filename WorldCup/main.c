@@ -1,30 +1,51 @@
-#include <stdio.h>
 #include "list.h"
 #include "tree.h"
+#include "cup.h"
 
 int main() {
-//    List* test;
-//
-//    test = ReadFile("teams.txt");
-//
-//    L_element* ptr = test->first;
-//    int i;
-//    for(i=0; i < test->amount; i++, ptr = ptr->next){
-//        printf("%s %d %d %d %d\n",ptr->team->name, ptr->team->attack, ptr->team->defense, ptr->team->resistance, ptr->team->speed);
-//    }
+    List* test;
+
+    test = ReadFile("teams.txt");
+
+    L_element* ptr = test->first;
     t_node* root = tree_create(4);
 
-    tree_print_preorder(root);
-
     t_heap* heap = create_heap();
-
     heapfy_tree(root, heap);
-    int i;
-    for(i=0; i<heap->size; i++){
-        printf("Heap atack: %d\n", heap->array[i]->team->attack);
+
+    int i,leafs;
+    leafs = heap->size/2;
+
+    for(i=0; i<16;i++, ptr = ptr->next){
+        heap->array[leafs++]->team = ptr->team;
+    }
+    ptr = test->first;
+
+    for(i=heap->size/2; i<heap->size;i++){
+        printf("team %d: %s  atack: %d \n", i ,heap->array[i]->team->name, heap->array[i]->team->attack);
     }
 
+    rounds(heap,1);
 
-    tree_free(root);
+    for(i=heap->size/4; i<heap->size/2;i++){
+        printf("winners first fase: %s  \n", heap->array[i]->team->name);
+    }
+
+    rounds(heap,2);
+
+    for(i=heap->size/8; i<heap->size/4;i++){
+        printf("winners second fase: %s  \n", heap->array[i]->team->name);
+    }
+
+    rounds(heap,3);
+
+    for(i=heap->size/16; i<heap->size/8;i++){
+        printf("winners third fase: %s  \n", heap->array[i]->team->name);
+    }
+
+    rounds(heap,4);
+    printf("BIG WINNER: %s  \n", heap->array[0]->team->name);
+
+//    tree_free(root);
     return 0;
 }

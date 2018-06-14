@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "tree.h"
 
 t_node* node_create(){
@@ -9,8 +11,8 @@ t_node* node_create(){
     return node;
 }
 
-//@TODO: Ask about recursivly function without parameters
 t_node* tree_create(int depth){
+    static int l=0;
     t_node* node = node_create();
     node->team = NULL;
     if(depth == 0){
