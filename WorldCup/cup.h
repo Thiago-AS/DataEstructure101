@@ -7,9 +7,14 @@ Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _
 
 void team_free(Team* team);
 
-//@TODO ask about attribute being int;
 Team* match(Team* team_one, Team* team_two, int attribute);
 
-void rounds(t_heap* heap ,int rounds);
+void rounds(t_heap* heap ,int rounds, Team* player);
+
+Team* choose_team(t_heap* heap);
+
+void print_attribute(Team* team, int attribute);
+
+int player_match(Team* player, Team* enemy, int previous_choice);
 
 #endif

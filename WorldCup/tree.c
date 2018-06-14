@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "tree.h"
+#include "cup.h"
 
 t_node* node_create(){
     t_node* node = (t_node*) malloc(sizeof(t_node));

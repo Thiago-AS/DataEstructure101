@@ -61,6 +61,8 @@ List* ReadFile(char* file_name){
     while (fgets(line, 100, teams) != NULL) {
         sscanf(line, "%[^,] , %d , %d , %d , %d", name, &attack, &defense, &resistance, &speed);
         InsertElement(ElementAlloc(team_create(name,attack,defense,resistance,speed)),list);
+        if(list->amount == 16)
+            break;
     }
 
     fclose(teams);
