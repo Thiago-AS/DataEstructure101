@@ -21,7 +21,7 @@ void menu(){
                 test = ReadFile("teams.txt");
 
                 L_element* ptr = test->first;
-                t_node* root = tree_create(4);
+                t_node* root = tree_create();
 
                 t_heap* heap = create_heap();
                 heapfy_tree(root, heap);
@@ -61,6 +61,12 @@ void menu(){
 
                 player = choose_team(heap);
                 rounds(heap,1,player);
+                rounds(heap,2,player);
+                rounds(heap,3,player);
+                rounds(heap,4,player);
+
+
+
                 break;
 
             case 2:

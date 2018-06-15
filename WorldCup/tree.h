@@ -2,11 +2,12 @@
 #define WORLDCUP_TREE_H
 
 #include "structs.h"
+#include "cup.h"
+
 
 t_node* node_create();
 
-//@TODO: Ask about recursivly function without parameters
-t_node* tree_create(int depth);
+t_node* tree_create();
 
 void tree_free(t_node* tree);
 

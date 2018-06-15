@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "tree.h"
-#include "cup.h"
 
 t_node* node_create(){
     t_node* node = (t_node*) malloc(sizeof(t_node));
@@ -12,19 +11,24 @@ t_node* node_create(){
     return node;
 }
 
-t_node* tree_create(int depth){
-    static int l=0;
+t_node* create_levels(int depth){
     t_node* node = node_create();
     node->team = NULL;
     if(depth == 0){
         return node;
     }else{
-        node->left = tree_create(depth-1);
-        node->right = tree_create(depth-1);
+        node->left = create_levels(depth-1);
+        node->right = create_levels(depth-1);
     }
 
     return node;
 }
+
+
+t_node* tree_create(){
+    return create_levels(4);
+}
+
 
 void tree_print_preorder(t_node* root){
     if(root != NULL){

@@ -17,4 +17,7 @@ void print_attribute(Team* team, int attribute);
 
 int player_match(Team* player, Team* enemy, int previous_choice);
 
+void result_screen(Team* winner, Team* loser, Team* player, int attribute, int round);
+
+
 #endif

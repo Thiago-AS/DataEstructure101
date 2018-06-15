@@ -25,17 +25,77 @@ Team* match(Team* team_one, Team* team_two, int attribute){
     return team_one;
 }
 
+void result_screen(Team *winner, Team *loser, Team *player, int attribute, int round){
+    system("clear");
+    switch(round){
+        case 1:
+            printf("Oitavas de final: Resultado\n");
+            break;
+        case 2:
+            printf("Quartas de final: Resultado\n");
+            break;
+        case 3:
+            printf("Semifinal: Resultado\n");
+            break;
+        case 4:
+            printf("Final: Resultado\n");
+            break;
+        default:
+            break;
+    }
+    if(winner == player){
+        printf("VITORIA\n");
+    }else{
+        printf("Derrota\n");
+    }
+    switch(attribute){
+        case 1:
+            printf("%s (Ataque %d) x %s (Ataque %d)\n", winner->name, winner->attack, loser->name, loser->attack);
+            printf("%s ganhou a partida\n", winner->name);
+            printf("Pressione qualquer tecla para prosseguir\n");
+            break;
+        case 2:
+            printf("%s (Defesa %d) x %s (Defesa %d)\n", winner->name, winner->defense, loser->name, loser->defense);
+            printf("%s ganhou a partida\n", winner->name);
+            printf("Pressione qualquer tecla para prosseguir\n");
+            break;
+        case 3:
+            printf("%s (Resistencia %d) x %s (Resistencia %d)\n", winner->name, winner->resistance, loser->name, loser->resistance);
+            printf("%s ganhou a partida\n", winner->name);
+            printf("Pressione qualquer tecla para prosseguir\n");
+            break;
+        case 4:
+            printf("%s (Velocidade %d) x %s (Velocidade %d)\n", winner->name, winner->speed, loser->name, loser->speed);
+            printf("%s ganhou a partida\n", winner->name);
+            printf("Pressione qualquer tecla para prosseguir\n");
+            break;
+        default:
+            break;
+    }
+}
+
+
+
 void rounds(t_heap* heap,int rounds, Team* player){
-    int i, player_choice = 0;
+    int i, player_choice;
     switch(rounds){
         case 1:
+            player_choice=0;
             for(i = (heap->size/2); i < heap->size; i=i+2){
                 if(heap->array[i]->team == player){
                     player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 1);
+                    else
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 1);
                 }else if(heap->array[i+1]->team == player){
                     player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 1);
+                    else
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 1);
                 }else{
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
                 }
@@ -43,17 +103,67 @@ void rounds(t_heap* heap,int rounds, Team* player){
             break;
         case 2:
             for(i = (heap->size/4); i < (heap->size/2); i=i+2){
-                heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,1);
+                if(heap->array[i]->team == player){
+                    player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 2);
+                    else
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 2);
+                }else if(heap->array[i+1]->team == player){
+                    player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 2);
+                    else
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 2);
+                }else{
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                }
             }
             break;
         case 3:
             for(i = (heap->size/8); i < (heap->size/4); i=i+2){
-                heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,1);
+                if(heap->array[i]->team == player){
+                    player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 3);
+                    else
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
+                }else if(heap->array[i+1]->team == player){
+                    player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 3);
+                    else
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 3);
+                }else{
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+
+                }
             }
             break;
         case 4:
             for(i = (heap->size/16); i < (heap->size/8); i=i+2){
-                heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,1);
+                if(heap->array[i]->team == player){
+                    player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 4);
+                    else
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
+
+                }else if(heap->array[i+1]->team == player){
+                    player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    if(heap->array[(i-1)/2]->team == player)
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
+                    else
+                        result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 4);
+                }else{
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                }
             }
             break;
 
@@ -107,62 +217,98 @@ void print_attribute(Team* team, int attribute){
 int player_match(Team* player, Team* enemy, int previous_choice){
     int choice;
     system("clear");
-    do{
-        printf("Seu time: %s\n", player->name);
         switch(previous_choice){
             case 1:
-                printf("1) XX: XX\n");
-                printf("2) Defesa: %d\n", player->defense);
-                printf("3) Resistencia: %d\n", player->resistance);
-                printf("4) Velocidade: %d\n", player->speed);
-                printf("Seu adversario: %s\n", enemy->name);
-                printf("Selecione um atributo: ");
-                scanf("%d", &choice);
+                do{
+                    printf("Seu time: %s\n", player->name);
+                    printf("1) XX: XX\n");
+                    printf("2) Defesa: %d\n", player->defense);
+                    printf("3) Resistencia: %d\n", player->resistance);
+                    printf("4) Velocidade: %d\n", player->speed);
+                    printf("\n");
+                    printf("Seu adversario: %s\n", enemy->name);
+                    printf("\n");
+                    printf("Selecione um atributo: ");
+                    scanf("%d", &choice);
+                    if(choice != 2 && choice != 3 && choice != 4){
+                        system("clear");
+                        printf("Selecione um dos atributos disponiveis a baixo\n");
+                    }
+                }while(choice != 2 && choice != 3 && choice != 4);
                 break;
             case 2:
-                printf("1) Ataque: %d\n", player->attack);
-                printf("2) XX: XX\n");
-                printf("3) Resistencia: %d\n", player->resistance);
-                printf("4) Velocidade: %d\n", player->speed);
-                printf("Seu adversario: %s\n", enemy->name);
-                printf("Selecione um atributo: ");
-                scanf("%d", &choice);
+                do{
+                    printf("Seu time: %s\n", player->name);
+                    printf("1) Ataque: %d\n", player->attack);
+                    printf("2) XX: XX\n");
+                    printf("3) Resistencia: %d\n", player->resistance);
+                    printf("4) Velocidade: %d\n", player->speed);
+                    printf("\n");
+                    printf("Seu adversario: %s\n", enemy->name);
+                    printf("\n");
+                    printf("Selecione um atributo: ");
+                    scanf("%d", &choice);
+                    if(choice != 1 && choice != 3 && choice != 4){
+                        system("clear");
+                        printf("Selecione um dos atributos disponiveis a baixo\n");
+                    }
+                }while(choice != 1 && choice != 3 && choice != 4);
                 break;
             case 3:
-                printf("1) Ataque: %d\n", player->attack);
-                printf("2) Defesa: %d\n", player->defense);
-                printf("3) XX: XX\n");
-                printf("4) Velocidade: %d\n", player->speed);
-                printf("Seu adversario: %s\n", enemy->name);
-                printf("Selecione um atributo: ");
-                scanf("%d", &choice);
+                do{
+                    printf("Seu time: %s\n", player->name);
+                    printf("1) Ataque: %d\n", player->attack);
+                    printf("2) Defesa: %d\n", player->defense);
+                    printf("3) XX: XX\n");
+                    printf("4) Velocidade: %d\n", player->speed);
+                    printf("\n");
+                    printf("Seu adversario: %s\n", enemy->name);
+                    printf("\n");
+                    printf("Selecione um atributo: ");
+                    scanf("%d", &choice);
+                    if(choice != 1 && choice != 2 && choice != 4){
+                        system("clear");
+                        printf("Selecione um dos atributos disponiveis a baixo\n");
+                    }
+                }while(choice != 1 && choice != 2 && choice != 4);
                 break;
             case 4:
-                printf("1) Ataque: %d\n", player->attack);
-                printf("2) Defesa: %d\n", player->defense);
-                printf("3) Resistencia: %d\n", player->resistance);
-                printf("4) XX: XX\n");
-                printf("Seu adversario: %s\n", enemy->name);
-                printf("Selecione um atributo: ");
-                scanf("%d", &choice);
+                do{
+                    printf("Seu time: %s\n", player->name);
+                    printf("1) Ataque: %d\n", player->attack);
+                    printf("2) Defesa: %d\n", player->defense);
+                    printf("3) Resistencia: %d\n", player->resistance);
+                    printf("4) XX: XX\n");
+                    printf("\n");
+                    printf("Seu adversario: %s\n", enemy->name);
+                    printf("\n");
+                    printf("Selecione um atributo: ");
+                    scanf("%d", &choice);
+                    if(choice != 1 && choice != 2 && choice != 3){
+                        system("clear");
+                        printf("Selecione um dos atributos disponiveis a baixo\n");
+                    }
+                }while(choice != 1 && choice != 2 && choice != 3);
                 break;
             default:
-                printf("1) Ataque: %d\n", player->attack);
-                printf("2) Defesa: %d\n", player->defense);
-                printf("3) Resistencia: %d\n", player->resistance);
-                printf("4) Velocidade: %d\n", player->speed);
-                printf("\n");
-                printf("Seu adversario: %s\n", enemy->name);
-                printf("\n");
-                printf("Selecione um atributo: ");
-                scanf("%d", &choice);
+                do{
+                    printf("Seu time: %s\n", player->name);
+                    printf("1) Ataque: %d\n", player->attack);
+                    printf("2) Defesa: %d\n", player->defense);
+                    printf("3) Resistencia: %d\n", player->resistance);
+                    printf("4) Velocidade: %d\n", player->speed);
+                    printf("\n");
+                    printf("Seu adversario: %s\n", enemy->name);
+                    printf("\n");
+                    printf("Selecione um atributo: ");
+                    scanf("%d", &choice);
+                    if(choice != 1 && choice != 2 && choice != 3 && choice != 4){
+                        system("clear");
+                        printf("Selecione um dos atributos disponiveis a baixo\n");
+                    }
+                }while(choice != 1 && choice != 2 && choice != 3 && choice != 4);
                 break;
         }
-        if(choice > 4 || choice < 1){
-            system("clear");
-            printf("Selecione um dos atributos disponiveis a baixo\n");
-        }
-    }while(choice > 4 || choice < 1);
 
     return choice;
 }
