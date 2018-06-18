@@ -121,3 +121,27 @@ char* decode_huffman(t_node* root, char* string, int len){
 
     return decoded;
 }
+
+char* encode_huffman(t_node* root, char* string){
+    char* binary = (char*)malloc(sizeof(char)*50);
+    char* char_code = (char*)malloc(sizeof(char)*50);
+    for(int i = 0; i < strlen(string); i++){
+       find_char_code(root,string[i],0,char_code,binary);
+    }
+    return binary;
+}
+
+void find_char_code(t_node* root, char c, int len, char* code, char* out){
+    if(root->left == NULL && root->right == NULL){
+        if(root->value == c){
+            code[len] = '\0';
+            strcat(out , code);
+            code[0]='\0';
+        }
+        return;
+    }
+    code[len] = '0';
+    find_char_code(root->left, c, len+1, code, out);
+    code[len] = '1';
+    find_char_code(root->right, c, len+1, code, out);
+}

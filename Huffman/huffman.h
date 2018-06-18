@@ -36,4 +36,9 @@ void print_array(t_heap* heap);
 
 char* decode_huffman(t_node* root, char* string, int len);
 
+char* encode_huffman(t_node* root, char* string);
+
+void find_char_code(t_node* root, char c, int len, char* code, char* out);
+
+
 #endif

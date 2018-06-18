@@ -2,17 +2,16 @@
 #include "huffman.h"
 
 int main() {
-    char* str = "cachorro";
+    char* str = "Brasil campeao";
     t_heap* heap = get_char_frequency(str);
-    print_array(heap);
-    printf("\n");
     create_tree(heap);
+    printf("Huffman tree (post order): \n");
     print_postorder(heap->array[0]);
 
-    char* str_coded = "111001110100010100";
-    char* str_decoded;
-    str_decoded = decode_huffman(heap->array[0], str_coded, 8);
-    printf("\n");
-    puts(str_decoded);
+    char* binary = encode_huffman(heap->array[0], str);
+    printf("Binary output (encoded): %s\n", binary);
+
+    char* str_decoded = decode_huffman(heap->array[0], binary, 8);
+    printf("String output (decoded): %s\n", str_decoded);
     return 0;
 }
