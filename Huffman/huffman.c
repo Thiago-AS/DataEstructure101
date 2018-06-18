@@ -19,6 +19,12 @@ t_node* allocate_node(char value, float freq){
     return node;
 }
 
+void print_array(t_heap* heap){
+    for(int i=0; i<heap->amount;i++){
+        printf("%c e %f \n", heap->array[i]->value, heap->array[i]->freq);
+    }
+}
+
 t_heap* get_char_frequency(char* string){
     int freq[256] = {0};
     int capacity = 0;
@@ -60,3 +66,34 @@ void bubble_sort(t_heap* heap){
         }
     }
 }
+
+void create_tree(t_heap* heap){
+    while(heap->array[0]->freq != 1){
+        bubble_sort(heap);
+        t_node* new_node = allocate_node('$',heap->array[0]->freq + heap->array[1]->freq);
+        new_node->left = heap->array[0];
+        new_node->right = heap->array[1];
+        heap->amount--;
+        heap->array[0] = new_node;
+        heap->array[1] = NULL;
+        remove_null(heap);
+    }
+}
+
+void remove_null(t_heap* heap){
+    for(int i = 1; i < heap->amount; i++){
+        if(i == heap->amount)
+            heap->array[i] = NULL;
+        else
+            heap->array[i] = heap ->array[i+1];
+    }
+}
+
+void print_postorder(t_node* root){
+    if(root!=NULL){
+        printf("%c e %f\n", root->value, root->freq);
+        print_postorder(root->left);
+        print_postorder(root->right);
+    }
+}
+

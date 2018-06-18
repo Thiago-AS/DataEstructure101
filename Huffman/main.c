@@ -2,15 +2,11 @@
 #include "huffman.h"
 
 int main() {
-    char* str = "cachorro";
+    char* str = "bccabbddaeccbbaeddcc";
     t_heap* heap = get_char_frequency(str);
-    for(int i = 0; i < heap->capacity; i++){
-        printf("%c e %f \n", heap->array[i]->value, heap->array[i]->freq);
-    }
+    print_array(heap);
     printf("\n");
-    bubble_sort(heap);
-    for(int i = 0; i < heap->capacity; i++){
-        printf("%c e %f \n", heap->array[i]->value, heap->array[i]->freq);
-    }
+    create_tree(heap);
+    print_postorder(heap->array[0]);
     return 0;
 }

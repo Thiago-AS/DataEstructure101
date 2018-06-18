@@ -26,6 +26,11 @@ t_node* allocate_node(char value, float freq);
 
 void bubble_sort(t_heap* heap);
 
-void swap(t_node* node1, t_node* node2);
+void create_tree(t_heap* heap);
 
+void remove_null(t_heap* heap);
+
+void print_postorder(t_node* root);
+
+void print_array(t_heap* heap);
 #endif
