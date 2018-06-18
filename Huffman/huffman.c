@@ -97,3 +97,27 @@ void print_postorder(t_node* root){
     }
 }
 
+char* decode_huffman(t_node* root, char* string, int len){
+    int j = 0;
+    t_node* aux;
+    aux = root;
+    char* decoded = (char*) malloc(sizeof(char)*len+1);
+    for(int i = 0; i < strlen(string); i++){
+        if(string[i]=='0'){
+            aux = aux->left;
+            if(aux->value != '$'){
+                decoded[j++] = aux->value;
+                aux = root;
+            }
+        }else{
+            aux = aux->right;
+            if(aux->value != '$'){
+                decoded[j++] = aux->value;
+                aux = root;
+            }
+        }
+    }
+    decoded[j] = '\0';
+
+    return decoded;
+}

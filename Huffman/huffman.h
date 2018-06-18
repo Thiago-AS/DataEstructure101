@@ -33,4 +33,7 @@ void remove_null(t_heap* heap);
 void print_postorder(t_node* root);
 
 void print_array(t_heap* heap);
+
+char* decode_huffman(t_node* root, char* string, int len);
+
 #endif
