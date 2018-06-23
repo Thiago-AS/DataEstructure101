@@ -43,31 +43,41 @@ void result_screen(Team *winner, Team *loser, Team *player, int attribute, int r
         default:
             break;
     }
-    if(winner == player){
+    if(winner == player && round != 4){
         printf("VITORIA\n");
+        print_attribute(winner, loser, attribute);
+        printf("%s ganhou a partida\n", winner->name);
+        printf("Pressione ENTER para continuar\n");
+        char ch = getchar();
+        scanf(" %c", &ch);
+    }else if(winner == player && round == 4){
+        printf("CAMPEAO\n");
+        print_attribute(winner, loser, attribute);
+        printf("%s ganhou a partida\n", winner->name);
     }else{
         printf("Derrota\n");
+        print_attribute(winner, loser, attribute);
+        printf("%s ganhou a partida\n", winner->name);
     }
+
+
+}
+
+void print_attribute(Team *team1, Team *team2, int attribute){
+
     switch(attribute){
         case 1:
-            printf("%s (Ataque %d) x %s (Ataque %d)\n", winner->name, winner->attack, loser->name, loser->attack);
-            printf("%s ganhou a partida\n", winner->name);
-            printf("Pressione qualquer tecla para prosseguir\n");
+            printf("%s (Ataque %d) x %s (Ataque %d)\n", team1->name, team1->attack, team2->name, team2->attack);
             break;
         case 2:
-            printf("%s (Defesa %d) x %s (Defesa %d)\n", winner->name, winner->defense, loser->name, loser->defense);
-            printf("%s ganhou a partida\n", winner->name);
-            printf("Pressione qualquer tecla para prosseguir\n");
+            printf("%s (Defesa %d) x %s (Defesa %d)\n", team1->name, team1->defense, team2->name, team2->defense);
             break;
         case 3:
-            printf("%s (Resistencia %d) x %s (Resistencia %d)\n", winner->name, winner->resistance, loser->name, loser->resistance);
-            printf("%s ganhou a partida\n", winner->name);
-            printf("Pressione qualquer tecla para prosseguir\n");
+            printf("%s (Resistencia %d) x %s (Resistencia %d)\n", team1->name, team1->resistance, team2->name, team2->resistance);
             break;
         case 4:
-            printf("%s (Velocidade %d) x %s (Velocidade %d)\n", winner->name, winner->speed, loser->name, loser->speed);
-            printf("%s ganhou a partida\n", winner->name);
-            printf("Pressione qualquer tecla para prosseguir\n");
+            printf("%s (Velocidade %d) x %s (Velocidade %d)\n", team1->name, team1->speed, team2->name, team2->speed);
+
             break;
         default:
             break;
@@ -75,29 +85,42 @@ void result_screen(Team *winner, Team *loser, Team *player, int attribute, int r
 }
 
 
-
-void rounds(t_heap* heap,int rounds, Team* player){
-    int i, player_choice;
+void rounds(t_heap* heap,int rounds, Team* player, game_log* log){
+    int i;
+    static int player_choice;
+    int ai_choice;
     switch(rounds){
         case 1:
             player_choice=0;
             for(i = (heap->size/2); i < heap->size; i=i+2){
                 if(heap->array[i]->team == player){
                     player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 1);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 1);
+                    }
                 }else if(heap->array[i+1]->team == player){
                     player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 1);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 1);
+                    }
                 }else{
-                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                    ai_choice = rand()%4+1;
+                    log->choices[log->index++] = ai_choice;
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, ai_choice);
                 }
             }
             break;
@@ -105,20 +128,32 @@ void rounds(t_heap* heap,int rounds, Team* player){
             for(i = (heap->size/4); i < (heap->size/2); i=i+2){
                 if(heap->array[i]->team == player){
                     player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 2);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 2);
+                    }
                 }else if(heap->array[i+1]->team == player){
                     player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 2);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 2);
+                    }
                 }else{
-                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                    ai_choice = rand()%4+1;
+                    log->choices[log->index++] = ai_choice;
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,ai_choice);
                 }
             }
             break;
@@ -126,20 +161,32 @@ void rounds(t_heap* heap,int rounds, Team* player){
             for(i = (heap->size/8); i < (heap->size/4); i=i+2){
                 if(heap->array[i]->team == player){
                     player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 3);
-                    else
-                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
+                    }
+                    else{
+                        log->round_player_lost = rounds;
+                        result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 3);
+                    }
                 }else if(heap->array[i+1]->team == player){
                     player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 3);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 3);
+                    }
                 }else{
-                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                    ai_choice = rand()%4+1;
+                    log->choices[log->index++] = ai_choice;
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,ai_choice);
 
                 }
             }
@@ -148,21 +195,32 @@ void rounds(t_heap* heap,int rounds, Team* player){
             for(i = (heap->size/16); i < (heap->size/8); i=i+2){
                 if(heap->array[i]->team == player){
                     player_choice =  player_match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 4);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
-
+                    }
                 }else if(heap->array[i+1]->team == player){
                     player_choice =  player_match(heap->array[i+1]->team,heap->array[i]->team, player_choice);
+                    log->choices[log->index++] = player_choice;
                     heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team, player_choice);
-                    if(heap->array[(i-1)/2]->team == player)
+                    if(heap->array[(i-1)/2]->team == player){
+                        log->round_player_lost = 0;
                         result_screen(heap->array[i + 1]->team, heap->array[i]->team, player, player_choice, 4);
-                    else
+                    }
+                    else{
+                        log->round_player_lost = rounds;
                         result_screen(heap->array[i]->team, heap->array[i + 1]->team, player, player_choice, 4);
+                    }
                 }else{
-                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,rand()%4+1);
+                    ai_choice = rand()%4+1;
+                    log->choices[log->index++] = ai_choice;
+                    heap->array[(i-1)/2]->team = match(heap->array[i]->team,heap->array[i+1]->team,ai_choice);
                 }
             }
             break;
@@ -181,7 +239,7 @@ Team* choose_team(t_heap* heap){
         printf("\n");
         for(i=heap->size/2; i<heap->size;i++){
             printf("Time %d :\n", counter++);
-            print_attribute(heap->array[i]->team,rand()%4 + 1);
+            print_random_attribute(heap->array[i]->team,rand()%4 + 1);
             printf("\n");
         }
         printf("-> ");
@@ -195,7 +253,7 @@ Team* choose_team(t_heap* heap){
     return heap->array[(heap->size/2) + choice-1]->team;
 }
 
-void print_attribute(Team* team, int attribute){
+void print_random_attribute(Team* team, int attribute){
     switch(attribute){
         case 1:
             printf("Ataque: %d  Defesa: ??  Resistencia: ??  Velocidade: ?? \n", team->attack);
@@ -213,6 +271,7 @@ void print_attribute(Team* team, int attribute){
             break;
     }
 }
+
 
 int player_match(Team* player, Team* enemy, int previous_choice){
     int choice;
@@ -311,4 +370,39 @@ int player_match(Team* player, Team* enemy, int previous_choice){
         }
 
     return choice;
+}
+
+void print_log(t_heap* heap, game_log* log) {
+    int i,j;
+    j = 0;
+    printf("Jogos da Copa\n");
+    printf("Oitavas de final:\n");
+    for (i = (heap->size / 2); i < heap->size; i = i + 2) {
+        print_attribute(heap->array[i]->team, heap->array[i+1]->team,log->choices[j++]);
+    }
+
+    if(log->round_player_lost == 1){
+        return;
+    }
+    printf("\n");
+    printf("Quartas de final:\n");
+    for (i = (heap->size / 4); i < (heap->size/2); i = i + 2) {
+        print_attribute(heap->array[i]->team, heap->array[i+1]->team,log->choices[j++]);
+    }
+    if(log->round_player_lost == 2){
+        return;
+    }
+    printf("\n");
+    printf("Semifinal:\n");
+    for (i = (heap->size / 8); i < (heap->size/4); i = i + 2) {
+        print_attribute(heap->array[i]->team, heap->array[i+1]->team,log->choices[j++]);
+    }
+    if(log->round_player_lost == 3){
+        return;
+    }
+    printf("\n");
+    printf("Final:\n");
+    for (i = (heap->size / 16); i < (heap->size/8); i = i + 2) {
+        print_attribute(heap->array[i]->team, heap->array[i+1]->team,log->choices[j++]);
+    }
 }

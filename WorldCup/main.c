@@ -4,12 +4,11 @@
 #include "time.h"
 
 void menu(){
-    srand(time(NULL));
-
-    int choice;
+    int choice, inner_choice;
     List* test;
     Team* player;
     do{
+        system("clear");
         printf("COPA 2018\n");
         printf("[1] Iniciar copa\n");
         printf("[2] Sair\n");
@@ -30,44 +29,38 @@ void menu(){
                 leafs = heap->size/2;
 
                 for(i=0; i<16;i++, ptr = ptr->next){
+                    printf("team: %s\n", ptr->team->name);
+                }
+
+                ptr=test->first;
+                for(i=0; i<16;i++, ptr = ptr->next){
                     heap->array[leafs++]->team = ptr->team;
                 }
-                ptr = test->first;
 
-                for(i=heap->size/2; i<heap->size;i++){
-                    printf("team %d: %s  atack: %d \n", i ,heap->array[i]->team->name, heap->array[i]->team->attack);
-                }
-
-//                rounds(heap,1);
-//
-//                for(i=heap->size/4; i<heap->size/2;i++){
-//                    printf("winners first fase: %s  \n", heap->array[i]->team->name);
-//                }
-//
-//                rounds(heap,2);
-//
-//                for(i=heap->size/8; i<heap->size/4;i++){
-//                    printf("winners second fase: %s  \n", heap->array[i]->team->name);
-//                }
-//
-//                rounds(heap,3);
-//
-//                for(i=heap->size/16; i<heap->size/8;i++){
-//                    printf("winners third fase: %s  \n", heap->array[i]->team->name);
-//                }
-//
-//                rounds(heap,4);
-//                printf("BIG WINNER: %s  \n", heap->array[0]->team->name);
+                game_log* log = (game_log*) malloc(sizeof(game_log));
+                log->index = 0;
+                log->round_player_lost = 0;
 
                 player = choose_team(heap);
-                rounds(heap,1,player);
-                rounds(heap,2,player);
-                rounds(heap,3,player);
-                rounds(heap,4,player);
-
-
-
-                break;
+                rounds(heap,1,player, log);
+                rounds(heap,2,player, log);
+                rounds(heap,3,player, log);
+                rounds(heap,4,player, log);
+                printf("\n");
+                print_log(heap,log);
+                do{
+                    printf("\n");
+                    printf("[1] Voltar ao menu principal\n");
+                    printf("[2] Sair\n");
+                    printf("->");
+                    scanf("%d", &inner_choice);
+                }while(inner_choice != 1 && inner_choice != 2);
+                if(inner_choice == 1){
+                    break;
+                }else{
+                    choice = 2;
+                    break;
+                }
 
             case 2:
                 break;
@@ -78,11 +71,10 @@ void menu(){
                 break;
         }
     }while(choice!=2);
-
 }
 
 int main() {
-
+    srand(time(NULL));
     menu();
     return 0;
 }

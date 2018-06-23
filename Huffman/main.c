@@ -2,7 +2,7 @@
 #include "huffman.h"
 
 int main() {
-    char* str = "Brasil campeao";
+    char* str = "brasil hexa";
     t_heap* heap = get_char_frequency(str);
     create_tree(heap);
     printf("Huffman tree (post order): \n");

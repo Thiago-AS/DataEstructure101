@@ -40,4 +40,10 @@ typedef struct heap{
     t_node** array;
 }t_heap;
 
+typedef struct game_log{
+    int round_player_lost;
+    int choices[15];
+    int index;
+}game_log;
+
 #endif
