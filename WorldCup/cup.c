@@ -2,6 +2,10 @@
 #include "list.h"
 #include "tree.h"
 
+/**
+ *  Compara o valor do atributo definido por attribute do team_one com o do team_two, retornando o ponteiro para
+ *  o time vencedor. Em caso de empate, o ponteiro para team_one é retornado.
+ */
 Team* match(Team* team_one, Team* team_two, int attribute){
     switch(attribute){
         case 1:
@@ -27,6 +31,10 @@ Team* match(Team* team_one, Team* team_two, int attribute){
     return team_one;
 }
 
+/**
+ *  Imprime o resultado da rodada atribuida por round. Caso winner seja igual a player, imprime vitoria e sua respectiva
+ *  partida, caso winner seja diferente de player, imprime derrota, terminando assim a copa para o usuario.
+ */
 void result_screen(Team *winner, Team *loser, Team *player, int attribute, int round){
     system("clear");
     switch(round){
@@ -51,7 +59,7 @@ void result_screen(Team *winner, Team *loser, Team *player, int attribute, int r
         printf("%s ganhou a partida\n", winner->name);
         printf("Pressione ENTER para continuar\n");
         char ch = getchar();
-        scanf(" %c", &ch);
+        while(getchar() != '\n');
     }else if(winner == player && round == 4){
         printf("CAMPEAO\n");
         print_attribute(winner, loser, attribute);
@@ -61,10 +69,11 @@ void result_screen(Team *winner, Team *loser, Team *player, int attribute, int r
         print_attribute(winner, loser, attribute);
         printf("%s ganhou a partida\n", winner->name);
     }
-
-
 }
 
+/**
+ *  Imprime os nomes e os respectivos atributos dos times fornecidos, team1 e team2.
+ */
 void print_attribute(Team *team1, Team *team2, int attribute){
 
     switch(attribute){
@@ -86,7 +95,15 @@ void print_attribute(Team *team1, Team *team2, int attribute){
     }
 }
 
-
+/**
+ *  Realiza a rodada fornecida por rounds. Para cada rodada, itera-se sobre os nos correspondetes da rodada (nivel),
+ *  caso um dos nós seja o time do usuario, realiza a jogada do usuario atraves da função player_choice, guarda o valor
+ *  do atributo escolhido no log das partidas, imprime o respectivo resultado atraves da funcao result_screen e reserva
+ *  o vencedor em sua respectiva posição na estrutura heap.
+ *
+ *  Caso não seja encontrado o time do usuario, realiza uma partida entre os respectivos nós, escolhendo o atributo de
+ *  maneira aleatória, e reservando o vencedor em sua respectiva posição na estrutura heap.
+ */
 void rounds(t_heap* heap,int rounds, Team* player, game_log* log){
     int i;
     static int player_choice;
@@ -232,6 +249,10 @@ void rounds(t_heap* heap,int rounds, Team* player, game_log* log){
     }
 }
 
+/**
+ *  Imprime os 16 times selecionados aleatoriamente do arquivo seguidos de um atributo aleatorio, permitindo que o
+ *  usuario escolha um dos times para representa-lo.
+ */
 Team* choose_team(t_heap* heap){
     int i, counter, choice;
     do{
@@ -255,6 +276,9 @@ Team* choose_team(t_heap* heap){
     return heap->array[(heap->size/2) + choice-1]->team;
 }
 
+/**
+ *  Imprime o atributo aleatorio fornecido do time.
+ */
 void print_random_attribute(Team* team, int attribute){
     switch(attribute){
         case 1:
@@ -274,7 +298,12 @@ void print_random_attribute(Team* team, int attribute){
     }
 }
 
-
+/**
+ *  Realiza a respectiva partida do jogador, imprimindo suas opções de atributos baseado na sua escolha anterior, e o
+ *  nome de seu oponente.
+ *
+ *  Retorna a opção de atributo escolhida pelo jogador.
+ */
 int player_match(Team* player, Team* enemy, int previous_choice){
     int choice;
     system("clear");
@@ -374,6 +403,12 @@ int player_match(Team* player, Team* enemy, int previous_choice){
     return choice;
 }
 
+/**
+ *  Realiza a respectiva partida do jogador, imprimindo suas opções de atributos baseado na sua escolha anterior, e o
+ *  nome de seu oponente.
+ *
+ *  Retorna a opção de atributo escolhida pelo jogador.
+ */
 void print_log(t_heap* heap, game_log* log) {
     int i,j;
     j = 0;
@@ -409,7 +444,11 @@ void print_log(t_heap* heap, game_log* log) {
     }
 }
 
-
+/**
+ *  Imprime o menu para o usuario, e inicializa todos os passos necessarios para acontecer a copa como ler o arquivo,
+ *  invocar as partidas das respectivas rodadas, imprimir o historico de partida entre outros.
+ *
+ */
 void menu(){
     int choice, inner_choice;
 
@@ -429,7 +468,7 @@ void menu(){
         switch(choice){
             case 1:
 
-                test = ReadFile("teams.txt");
+                test = read_file("teams.txt");
 
                 L_element* ptr = test->first;
 
@@ -485,6 +524,11 @@ void menu(){
 
 }
 
+/**
+ *  Libera a memoria da arvore criada, libera a memoria da lista duplamente encadeada criada, libera a memoria
+ *  da estrutura heap utilizada e por fim libera a memoria do historico de partidas.
+ *
+ */
 void clear_game(t_heap* heap, List* list, game_log* log){
     tree_free(heap->array[0]);
     list_free(list);
