@@ -255,9 +255,9 @@ void rounds(t_heap* heap,int rounds, Team* player, game_log* log){
  */
 Team* choose_team(t_heap* heap){
     int i, counter, choice;
+    system("clear");
     do{
         counter = 1;
-        system("clear");
         printf("Escolha seu time\n");
         printf("\n");
         for(i=heap->size/2; i<heap->size;i++){
@@ -476,10 +476,6 @@ void menu(){
 
                 int i,leafs;
                 leafs = heap->size/2;
-
-                for(i=0; i<16;i++, ptr = ptr->next){
-                    printf("team: %s\n", ptr->team->name);
-                }
 
                 ptr=test->first;
                 for(i=0; i<16;i++, ptr = ptr->next){
