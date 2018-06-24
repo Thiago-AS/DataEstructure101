@@ -11,7 +11,7 @@ List* ListAlloc(){
 
 Team* team_create(char* _name, int _attack, int _defense, int _resistance, int _speed){
     Team* team = (Team*) malloc(sizeof(Team));
-    team->name = (char*) malloc(sizeof(char)*strlen(_name)+1);
+    team->name = (char*) malloc(sizeof(char)* (strlen(_name)+1));
     strcpy(team->name,_name);
     team->attack = _attack;
     team->defense = _defense;
@@ -68,10 +68,6 @@ List* ReadFile(char* file_name){
         strcpy(array_teams[count_line++],line);
     }
 
-//    for(i = 0; i<32;i++){
-//        printf("team : %s",array_teams[i]);
-//    }
-
     while(list->amount != 16){
         index = rand() % 31;
         for(i = 0; i< count_index; i++){
@@ -94,6 +90,21 @@ List* ReadFile(char* file_name){
 void team_free(Team* team){
     free(team->name);
     free(team);
+}
+
+void list_free(List* list){
+    L_element* ptr = list->first;
+
+    if(list->first != NULL && list->last != NULL){
+        while(ptr != NULL){
+            list->first = list->first->next;
+            team_free(ptr->team);
+            free(ptr);
+            ptr = list->first;
+        }
+    }
+
+    free(list);
 }
 
 

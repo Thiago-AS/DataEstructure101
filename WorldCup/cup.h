@@ -23,6 +23,10 @@ void result_screen(Team* winner, Team* loser, Team* player, int attribute, int r
 
 void print_log(t_heap* heap, game_log* log);
 
+void menu();
+
+void clear_game(t_heap* heap, List* list, game_log* log);
+
 
 
 #endif

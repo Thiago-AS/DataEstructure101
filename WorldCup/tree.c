@@ -43,7 +43,6 @@ void tree_free(t_node* tree){
     if(tree!=NULL){
         tree_free(tree->left);
         tree_free(tree->right);
-        team_free(tree->team);
         free(tree);
     }
 }
@@ -68,10 +67,10 @@ void heapfy_tree(t_node* root, t_heap* heap){
 }
 
 t_heap* create_heap(){
-    t_heap* heap = (t_heap*) malloc(sizeof(t_heap*));
+    t_heap* heap = (t_heap*) malloc(sizeof(t_heap));
     heap->capacity = 31;
     heap->size = 0;
-    heap->array = (t_node**) malloc(heap->capacity* sizeof(t_node*));
+    heap->array = (t_node**) malloc(heap->capacity * sizeof(t_node*));
 
     return heap;
 }

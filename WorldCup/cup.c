@@ -1,4 +1,6 @@
 #include "cup.h"
+#include "list.h"
+#include "tree.h"
 
 Team* match(Team* team_one, Team* team_two, int attribute){
     switch(attribute){
@@ -405,4 +407,88 @@ void print_log(t_heap* heap, game_log* log) {
     for (i = (heap->size / 16); i < (heap->size/8); i = i + 2) {
         print_attribute(heap->array[i]->team, heap->array[i+1]->team,log->choices[j++]);
     }
+}
+
+
+void menu(){
+    int choice, inner_choice;
+
+    do{
+        List* test;
+        Team* player;
+        t_node* root = tree_create();
+        t_heap* heap = create_heap();
+        game_log* log = (game_log*) malloc(sizeof(game_log));
+
+        system("clear");
+        printf("COPA 2018\n");
+        printf("[1] Iniciar copa\n");
+        printf("[2] Sair\n");
+        printf("-> ");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1:
+
+                test = ReadFile("teams.txt");
+
+                L_element* ptr = test->first;
+
+                heapfy_tree(root, heap);
+
+                int i,leafs;
+                leafs = heap->size/2;
+
+                for(i=0; i<16;i++, ptr = ptr->next){
+                    printf("team: %s\n", ptr->team->name);
+                }
+
+                ptr=test->first;
+                for(i=0; i<16;i++, ptr = ptr->next){
+                    heap->array[leafs++]->team = ptr->team;
+                }
+
+                log->index = 0;
+                log->round_player_lost = 0;
+
+                player = choose_team(heap);
+                rounds(heap,1,player, log);
+                rounds(heap,2,player, log);
+                rounds(heap,3,player, log);
+                rounds(heap,4,player, log);
+                printf("\n");
+                print_log(heap,log);
+                do{
+                    printf("\n");
+                    printf("[1] Voltar ao menu principal\n");
+                    printf("[2] Sair\n");
+                    printf("->");
+                    scanf("%d", &inner_choice);
+                }while(inner_choice != 1 && inner_choice != 2);
+                if(inner_choice == 1){
+                    clear_game(heap,test,log);
+                    break;
+                }else{
+                    choice = 2;
+                    clear_game(heap,test,log);
+                    break;
+                }
+
+            case 2:
+                break;
+
+            default:
+                system("clear");
+                printf("Escolha uma das opções a baixo\n");
+                break;
+        }
+    }while(choice!=2);
+
+}
+
+void clear_game(t_heap* heap, List* list, game_log* log){
+    tree_free(heap->array[0]);
+    list_free(list);
+    free(heap->array);
+    free(heap);
+    free(log);
 }
